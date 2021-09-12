@@ -51,7 +51,7 @@ public class Main {
                 String packageDescription = description.asNormalizedText().replaceAll("[\\t\\n\\r]+"," ")
                         .replaceAll("  ", " ").replaceAll("/", "per");
                 String packagePrice = splitPriceStr[0].replaceAll("[\\t\\n\\r]+"," ").trim();
-                String discount = splitPriceStr.length > 1 ? splitPriceStr[1] : "No discount";
+                String discount = splitPriceStr.length > 1 ? splitPriceStr[1].trim() : "None";
 
                 // get the price without the £ sign
                 String[] splitPrice = packagePrice.split(" ");

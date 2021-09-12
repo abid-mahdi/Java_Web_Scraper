@@ -1,9 +1,13 @@
 package entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+@JsonPropertyOrder({"option title", "description", "price", "discount"})
 public class Package {
 
+    @JsonProperty("option title")
     private String title;
     private String description;
     private String price;
@@ -19,16 +23,12 @@ public class Package {
         this.annualPrice = annualPrice;
     }
 
-    public double getAnnualPrice() {
-        return annualPrice;
+    public String getTitle() {
+        return title;
     }
 
     public String getDescription() {
         return description;
-    }
-
-    public String getTitle() {
-        return title;
     }
 
     public String getPrice() {
@@ -38,4 +38,9 @@ public class Package {
     public String getDiscount() {
         return discount;
     }
+
+    public double getAnnualPrice() {
+        return annualPrice;
+    }
+
 }

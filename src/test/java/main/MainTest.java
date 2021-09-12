@@ -2,7 +2,9 @@ package main;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import entities.Package;
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -27,49 +29,57 @@ class MainTest {
         jsonOut = Main.listToJSON(sortedPackages);
     }
 
-    // Test to check output JSON array is correct
+    // Test to check output JSON is correct
     @Test
-    void checkJsonMessage() {
-        assertEquals("JSON ouput array is incorrect",
-                "[\n" +
-                        "    {\n" +
-                        "        \"price\": \"£66.00 (inc. VAT) Per Year\",\n" +
-                        "        \"description\": \"Up to 480 minutes talk time per year including 240 SMS (5p per minute and 4p per SMS thereafter)\",\n" +
-                        "        \"discount\": \" £5 on the monthly price\",\n" +
-                        "        \"title\": \"Option 480 Mins\"\n" +
-                        "    },\n" +
-                        "    {\n" +
-                        "        \"price\": \"£6.00 (inc. VAT) Per Month\",\n" +
-                        "        \"description\": \"Up to 40 minutes talk time per month including 20 SMS (5p per minute and 4p per SMS thereafter)\",\n" +
-                        "        \"discount\": \"No discount\",\n" +
-                        "        \"title\": \"Option 40 Mins\"\n" +
-                        "    },\n" +
-                        "    {\n" +
-                        "        \"price\": \"£108.00 (inc. VAT) Per Year\",\n" +
-                        "        \"description\": \"Up to 2000 minutes talk time per year including 420 SMS (5p per minute and 4p per SMS thereafter)\",\n" +
-                        "        \"discount\": \" £12 on the monthly price\",\n" +
-                        "        \"title\": \"Option 2000 Mins\"\n" +
-                        "    },\n" +
-                        "    {\n" +
-                        "        \"price\": \"£10.00 (inc. VAT) Per Month\",\n" +
-                        "        \"description\": \"Up to 160 minutes talk time per month including 35 SMS (5p per minute and 4p per SMS thereafter)\",\n" +
-                        "        \"discount\": \"No discount\",\n" +
-                        "        \"title\": \"Option 160 Mins\"\n" +
-                        "    },\n" +
-                        "    {\n" +
-                        "        \"price\": \"£174.00 (inc. VAT) Per Year\",\n" +
-                        "        \"description\": \"Up to 3600 minutes talk time per year including 480 SMS (5p per minute and 4p per SMS thereafter)\",\n" +
-                        "        \"discount\": \" £18 on the monthly price\",\n" +
-                        "        \"title\": \"Option 3600 Mins\"\n" +
-                        "    },\n" +
-                        "    {\n" +
-                        "        \"price\": \"£16.00 (inc. VAT) Per Month\",\n" +
-                        "        \"description\": \"300 minutes talk time per month including 40 SMS (5p per minute and 4p per SMS thereafter)\",\n" +
-                        "        \"discount\": \"No discount\",\n" +
-                        "        \"title\": \"Option 300 Mins\"\n" +
-                        "    }\n" +
-                        "]",
-                jsonOut);
+    void checkJsonMessage() throws JSONException {
+        JSONObject option480 = new JSONObject();
+        option480.put("description", "Up to 480 minutes talk time per year including 240 SMS (5p per minute and 4p per SMS thereafter)");
+        option480.put("discount", "£5 on the monthly price");
+        option480.put("option title", "Option 480 Mins");
+        option480.put("price", "£66.00 (inc. VAT) Per Year");
+
+        JSONObject option40 = new JSONObject();
+        option40.put("description", "Up to 40 minutes talk time per month including 20 SMS (5p per minute and 4p per SMS thereafter)");
+        option40.put("discount", "None");
+        option40.put("option title", "Option 40 Mins");
+        option40.put("price", "£6.00 (inc. VAT) Per Month");
+
+        JSONObject option2000 = new JSONObject();
+        option2000.put("description", "Up to 2000 minutes talk time per year including 420 SMS (5p per minute and 4p per SMS thereafter)");
+        option2000.put("discount", "£12 on the monthly price");
+        option2000.put("option title", "Option 2000 Mins");
+        option2000.put("price", "£108.00 (inc. VAT) Per Year");
+
+        JSONObject option160 = new JSONObject();
+        option160.put("description", "Up to 160 minutes talk time per month including 35 SMS (5p per minute and 4p per SMS thereafter)");
+        option160.put("discount", "None");
+        option160.put("option title", "Option 160 Mins");
+        option160.put("price", "£10.00 (inc. VAT) Per Month");
+
+        JSONObject option3600 = new JSONObject();
+        option3600.put("description", "Up to 3600 minutes talk time per year including 480 SMS (5p per minute and 4p per SMS thereafter)");
+        option3600.put("discount", "£18 on the monthly price");
+        option3600.put("option title", "Option 3600 Mins");
+        option3600.put("price", "£174.00 (inc. VAT) Per Year");
+
+        JSONObject option300 = new JSONObject();
+        option300.put("description", "300 minutes talk time per month including 40 SMS (5p per minute and 4p per SMS thereafter)");
+        option300.put("discount", "None");
+        option300.put("option title", "Option 300 Mins");
+        option300.put("price", "£16.00 (inc. VAT) Per Month");
+
+        JSONArray expectedArray = new JSONArray();
+        expectedArray.put(option480);
+        expectedArray.put(option40);
+        expectedArray.put(option2000);
+        expectedArray.put(option160);
+        expectedArray.put(option3600);
+        expectedArray.put(option300);
+
+        JSONArray actualOutput = new JSONArray(jsonOut);
+        assertEquals("Wrong JSON returned",
+                expectedArray.toString(),
+                actualOutput.toString());
     }
 
     // Test to check that all the packages have retrieved from website
