@@ -17,7 +17,7 @@ Kindly ensure you have the following installed on your machine:
 
 2. Check into the cloned repository
 ```
-$ cd Java_Web-Scraper-master
+$ cd Java_Web_Scraper-master
 ```
 
 3. Install the dependencies and package the application
