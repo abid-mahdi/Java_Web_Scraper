@@ -53,7 +53,7 @@ public class Main {
                 String packagePrice = splitPriceStr[0].replaceAll("[\\t\\n\\r]+"," ").trim();
                 String discount = splitPriceStr.length > 1 ? splitPriceStr[1].trim() : "None";
 
-                // get the price without the £ sign
+                // get the price without the pound sign
                 String[] splitPrice = packagePrice.split(" ");
                 double listedPrice = Double.parseDouble(splitPrice[0].substring(1));
 
