@@ -2,6 +2,7 @@ package main;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import entities.Package;
+import org.json.JSONException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +21,7 @@ class MainTest {
     private static String jsonOut;
 
     @BeforeAll
-    static void init() throws JsonProcessingException {
+    static void init() throws JsonProcessingException, JSONException {
         packages = Main.scrape();
         sortedPackages = Main.sortByAnnualPrice(packages);
         jsonOut = Main.listToJSON(sortedPackages);
@@ -30,7 +31,44 @@ class MainTest {
     @Test
     void checkJsonMessage() {
         assertEquals("JSON ouput array is incorrect",
-                "[{\"title\":\"Option 480 Mins\",\"description\":\"Up to 480 minutes talk time per year including 240 SMS (5p / minute and 4p / SMS thereafter)\",\"price\":\"£66.00 (inc. VAT) Per Year \",\"discount\":\"£5 on the monthly price\"},{\"title\":\"Option 40 Mins\",\"description\":\"Up to 40 minutes talk time per month including 20 SMS (5p / minute and 4p / SMS thereafter)\",\"price\":\"£6.00 (inc. VAT) Per Month\",\"discount\":\"No discount\"},{\"title\":\"Option 2000 Mins\",\"description\":\"Up to 2000 minutes talk time per year including 420 SMS (5p / minute and 4p / SMS thereafter)\",\"price\":\"£108.00 (inc. VAT) Per Year \",\"discount\":\"£12 on the monthly price\"},{\"title\":\"Option 160 Mins\",\"description\":\"Up to 160 minutes talk time per month including 35 SMS (5p / minute and 4p / SMS thereafter)\",\"price\":\"£10.00 (inc. VAT) Per Month\",\"discount\":\"No discount\"},{\"title\":\"Option 3600 Mins\",\"description\":\"Up to 3600 minutes talk time per year including 480 SMS (5p / minute and 4p / SMS thereafter)\",\"price\":\"£174.00 (inc. VAT) Per Year \",\"discount\":\"£18 on the monthly price\"},{\"title\":\"Option 300 Mins\",\"description\":\"300 minutes talk time per month including 40 SMS (5p / minute and 4p / SMS thereafter)\",\"price\":\"£16.00 (inc. VAT) Per Month\",\"discount\":\"No discount\"}]",
+                "[\n" +
+                        "    {\n" +
+                        "        \"price\": \"£66.00 (inc. VAT) Per Year\",\n" +
+                        "        \"description\": \"Up to 480 minutes talk time per year including 240 SMS (5p per minute and 4p per SMS thereafter)\",\n" +
+                        "        \"discount\": \" £5 on the monthly price\",\n" +
+                        "        \"title\": \"Option 480 Mins\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "        \"price\": \"£6.00 (inc. VAT) Per Month\",\n" +
+                        "        \"description\": \"Up to 40 minutes talk time per month including 20 SMS (5p per minute and 4p per SMS thereafter)\",\n" +
+                        "        \"discount\": \"No discount\",\n" +
+                        "        \"title\": \"Option 40 Mins\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "        \"price\": \"£108.00 (inc. VAT) Per Year\",\n" +
+                        "        \"description\": \"Up to 2000 minutes talk time per year including 420 SMS (5p per minute and 4p per SMS thereafter)\",\n" +
+                        "        \"discount\": \" £12 on the monthly price\",\n" +
+                        "        \"title\": \"Option 2000 Mins\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "        \"price\": \"£10.00 (inc. VAT) Per Month\",\n" +
+                        "        \"description\": \"Up to 160 minutes talk time per month including 35 SMS (5p per minute and 4p per SMS thereafter)\",\n" +
+                        "        \"discount\": \"No discount\",\n" +
+                        "        \"title\": \"Option 160 Mins\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "        \"price\": \"£174.00 (inc. VAT) Per Year\",\n" +
+                        "        \"description\": \"Up to 3600 minutes talk time per year including 480 SMS (5p per minute and 4p per SMS thereafter)\",\n" +
+                        "        \"discount\": \" £18 on the monthly price\",\n" +
+                        "        \"title\": \"Option 3600 Mins\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "        \"price\": \"£16.00 (inc. VAT) Per Month\",\n" +
+                        "        \"description\": \"300 minutes talk time per month including 40 SMS (5p per minute and 4p per SMS thereafter)\",\n" +
+                        "        \"discount\": \"No discount\",\n" +
+                        "        \"title\": \"Option 300 Mins\"\n" +
+                        "    }\n" +
+                        "]",
                 jsonOut);
     }
 
@@ -68,7 +106,7 @@ class MainTest {
                 .stream()
                 .filter(p -> p.getTitle().equalsIgnoreCase(title))
                 .collect(Collectors.toList());
-        return (titleList.size() > 0) ? true : false;
+        return titleList.size() > 0;
     }
 
 }

@@ -2,10 +2,11 @@ package main;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.json.JSONArray;
+import org.json.JSONException;
 import entities.Package;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ public class Main {
 
     private static final String URL = "https://videx.comesconnected.com/";
 
-    public static void main(String[] args) throws JsonProcessingException {
+    public static void main(String[] args) throws JsonProcessingException, JSONException {
         System.out.println(listToJSON(sortByAnnualPrice(scrape())));
     }
 
@@ -45,11 +46,11 @@ public class Main {
                 HtmlElement price = items.get(i).getFirstByXPath(".//div[@class='package-price']");
 
                 // extract Strings from HtmlElements
-                String[] splitPriceStr = price.asNormalizedText().split("Save ");
+                String[] splitPriceStr = price.asNormalizedText().split("Save");
                 String packageTitle = title.asNormalizedText();
                 String packageDescription = description.asNormalizedText().replaceAll("[\\t\\n\\r]+"," ")
-                        .replaceAll("  ", " ");
-                String packagePrice = splitPriceStr[0].replaceAll("[\\t\\n\\r]+"," ");
+                        .replaceAll("  ", " ").replaceAll("/", "per");
+                String packagePrice = splitPriceStr[0].replaceAll("[\\t\\n\\r]+"," ").trim();
                 String discount = splitPriceStr.length > 1 ? splitPriceStr[1] : "No discount";
 
                 // get the price without the £ sign
@@ -65,9 +66,7 @@ public class Main {
                         packagePrice, discount, annualPrice);
                 packages.add(p);
             }
-        } catch (FailingHttpStatusCodeException e) {
-            System.out.println("Could not connect to website, check connection and URL.");
-        }  catch (IOException e) {
+        } catch (IOException e) {
             System.out.println("Connection error.");
         }
 
@@ -85,9 +84,15 @@ public class Main {
                 .collect(Collectors.toList());
     }
 
-    public static String listToJSON(List<Package> packages) throws JsonProcessingException {
+    /**
+     * Converts ArrayList to JSON Array and outputs as String.
+     * @param packages Input list to create JSON from.
+     * @return Formatted JSON array as String.
+     */
+    public static String listToJSON(List<Package> packages) throws JsonProcessingException, JSONException {
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writeValueAsString(packages);
+        JSONArray json = new JSONArray(objectMapper.writeValueAsString(packages)); // convert text to object
+        return json.toString(4); // formats JSON and idents by 4 spaces
     }
 
 }
