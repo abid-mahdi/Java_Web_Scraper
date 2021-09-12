@@ -40,6 +40,7 @@ public class Main {
             List<HtmlElement> items = page.getByXPath("//div[@class='package-features']");
             List<HtmlElement> itemTitles = page.getByXPath("//div[@class='header dark-bg']");
 
+            // goes through each package found on website and creates Package object
             for (int i = 0; i < items.size(); i++) {
                 HtmlElement title = itemTitles.get(i).getFirstByXPath(".//h3");
                 HtmlElement description = items.get(i).getFirstByXPath(".//div[@class='package-name']");
@@ -48,9 +49,13 @@ public class Main {
                 // extract Strings from HtmlElements
                 String[] splitPriceStr = price.asNormalizedText().split("Save");
                 String packageTitle = title.asNormalizedText();
-                String packageDescription = description.asNormalizedText().replaceAll("[\\t\\n\\r]+"," ")
-                        .replaceAll("  ", " ").replaceAll("/", "per");
-                String packagePrice = splitPriceStr[0].replaceAll("[\\t\\n\\r]+"," ").trim();
+                String packageDescription = description.asNormalizedText()
+                        .replaceAll("[\\t\\n\\r]+"," ")
+                        .replaceAll("  ", " ")
+                        .replaceAll("/", "per");
+                String packagePrice = splitPriceStr[0]
+                        .replaceAll("[\\t\\n\\r]+"," ")
+                        .trim();
                 String discount = splitPriceStr.length > 1 ? splitPriceStr[1].trim() : "None";
 
                 // get the price without the pound sign
@@ -91,7 +96,8 @@ public class Main {
      */
     public static String listToJSON(List<Package> packages) throws JsonProcessingException, JSONException {
         ObjectMapper objectMapper = new ObjectMapper();
-        JSONArray json = new JSONArray(objectMapper.writeValueAsString(packages)); // convert text to object
+        String uglyJson = objectMapper.writeValueAsString(packages); // convert ArrayList object to JSON as String
+        JSONArray json = new JSONArray(uglyJson); // convert text to object
         return json.toString(4); // formats JSON and idents by 4 spaces
     }
 
